@@ -9,7 +9,8 @@ import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { ApiService} from './api.service';
+import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
 import { MessagesComponent } from './messages.component';
 import { RegisterComponent } from './register.component';
 import { LoginComponent } from './login.component';
@@ -35,7 +36,7 @@ const route = [
     MatInputModule,
     BrowserAnimationsModule
   ],
-  providers: [ApiService],
+  providers: [ApiService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
