@@ -5,7 +5,8 @@ import { ApiService } from './api.service';
   selector: 'app-root',
   template: `
             <mat-toolbar>
-            PSSocial
+            <button mat-button routerLink = "/">PSSocial</button>
+            <button mat-button routerLink = "/users">Users</button>
             <span style = "flex: 1 1 auto"></span>
             <button mat-button routerLink = "/register">Register</button>
             </mat-toolbar>
@@ -20,7 +21,4 @@ export class AppComponent {
 
   }
 
-  ngOnInit() {
-    this.apiService.getMessages();
-  }
 }

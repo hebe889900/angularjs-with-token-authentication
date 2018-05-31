@@ -13,11 +13,23 @@ import { ActivatedRoute } from '@angular/router';
             </mat-card-header>
             <mat-card-content>
                 <mat-list>
-                    <mat-list-item>Name: </mat-list-item>
+                    <mat-list-item>Name: {{profile?.name}}</mat-list-item>
                     <mat-list-item>Email: {{profile?.email}}</mat-list-item>
+                    <mat-list-item>Description: {{profile?.description}}</mat-list-item>
                 </mat-list>            
             </mat-card-content>
         </mat-card>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    <h4>Posts</h4>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <messages></messages>           
+            </mat-card-content>
+        </mat-card>        
+
 
 
   `,
@@ -30,6 +42,6 @@ export class ProfileComponent {
 
     ngOnInit() {
         var id = this.route.snapshot.params.id;
-        this.apiService.getProfile(id).subscribe(data => this.profile = data.json());
+        this.apiService.getProfile(id).subscribe(data => this.profile = data);
     }
 }

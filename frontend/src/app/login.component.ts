@@ -13,10 +13,10 @@ import { AuthService } from './auth.service';
             <mat-card-content>
                 <form>        
                     <mat-form-field>
-                        <input [(ngModel)] = "loginData.email" matInput placeholder = "email" name = "email">
+                        <input [(ngModel)] = "loginData.email" matInput placeholder = "email" name = "email" type = "email">
                     </mat-form-field>
                     <mat-form-field>
-                        <input [(ngModel)] = "loginData.pwd" matInput placeholder = "password" name = "password">
+                        <input [(ngModel)] = "loginData.pwd" matInput placeholder = "password" name = "password" type = "password">
                     </mat-form-field>    
                     <button (click)="post()" mat-raised-button color = "accent">Login</button>        
                 </form>            

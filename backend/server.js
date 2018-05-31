@@ -3,22 +3,36 @@ var app = express();
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var jwt = require("jwt-simple");
+
 
 var User = require('./models/User.js');
+var Post = require('./models/Post.js');
+var auth = require('./auth.js');
 
 mongoose.Promise = Promise;
 
-var posts = [
-    {message: 'hello'},
-    {message: 'hi'}
-]
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.get('/posts', (req, res) => {
+app.get('/posts/:id',async (req, res) => {
+    var author = req.params.id;
+    var posts = await Post.find({author})
     res.send(posts);
+})
+
+app.post('/post', (req, res) => {
+    var postData = req.body;
+    postData.author = '5b0edb9b9d720240bc7aa15f';
+    var post = new Post(postData);
+    post.save((err, result) => {
+        if(err) {
+            console.log('saving user error');
+            return res.status(500).send({message: 'saving post error'})
+        }
+        console.log("msg saved");
+        res.sendStatus(200);
+    })
 })
 
 app.get('/users', async (req, res) => {
@@ -41,40 +55,10 @@ app.get('/profile/:id', async (req, res) => {
     }
 })
 
-app.post('/register', (req, res) => {
-    var userData = req.body;
-    var user = new User(userData);
-    user.save((err, result) => {
-        if(err) {
-            console.log('saving user error');
-        }
-        console.log("result");
-        res.sendStatus(200);
-    })  
-})
-
-
-app.post('/login', async (req, res) => {
-    var userData = req.body;
-    var user = await User.findOne({email: userData.email})
-    if(!user) {
-        return res.status(401).send({message: 'Email or Password invalid'})
-    }
-
-    if(userData.pws != user.pwd) {
-        return res.status(401).send({message: 'Email or Password invalid'})
-    }
-
-    var payload = {};
-    var token = jwt.encode(payload, '123');//Hash function
-
-    console.log(token);
-
-    res.status(200).send({token});
-})
-
 mongoose.connect('mongodb://127.0.0.1:27017/myApp', {
-  })
-  .then(() => console.log('connection successful'))
-  .catch((err) => console.error(err));
+})
+.then(() => console.log('connection successful'))
+.catch((err) => console.error(err));
+
+app.use('/auth', auth);
 app.listen(3000);
