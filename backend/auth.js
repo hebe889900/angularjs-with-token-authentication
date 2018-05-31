@@ -34,4 +34,21 @@ router.post('/login', async (req, res) => {
     })
 })
 
-module.exports = router;
+var auth = {
+    router,
+    checkAuthentication: (req, res, next) => {
+        if(!req.header('authorization')) {
+            return res.status(401).send({message: "Unautorized. Missing Auth Header"});
+        }
+        var token = req.header('authorization').split(' ')[1];
+        var payload = jwt.decode(token, "123");
+    
+        if(!payload) {
+            return res.status(401).send({message: "Unauthorized, Auth Header Invalid"})
+        }
+        req.userId = payload.sub;
+        console.log(token);
+        next()
+    }
+}
+module.exports = auth;

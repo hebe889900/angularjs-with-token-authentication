@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -8,7 +9,8 @@ import { ApiService } from './api.service';
             <button mat-button routerLink = "/">PSSocial</button>
             <button mat-button routerLink = "/users">Users</button>
             <span style = "flex: 1 1 auto"></span>
-            <button mat-button routerLink = "/register">Register</button>
+            <button mat-button *ngIf="!authService.isAuthenticated" routerLink = "/register">Register</button>
+            <button mat-button *ngIf="authService.isAuthenticated" (click) = "authService.logout()">Log Out</button>
             </mat-toolbar>
             <router-outlet></router-outlet>
   `,
@@ -17,7 +19,7 @@ import { ApiService } from './api.service';
 export class AppComponent {
   title = 'app';
 
-  constructor ( private apiService: ApiService) {
+  constructor ( private authService: AuthService) {
 
   }
 

@@ -3,6 +3,7 @@ var app = express();
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var jwt = require("jwt-simple");
 
 
 var User = require('./models/User.js');
@@ -10,7 +11,6 @@ var Post = require('./models/Post.js');
 var auth = require('./auth.js');
 
 mongoose.Promise = Promise;
-
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -21,9 +21,9 @@ app.get('/posts/:id',async (req, res) => {
     res.send(posts);
 })
 
-app.post('/post', (req, res) => {
+app.post('/post', auth.checkAuthentication, (req, res) => {
     var postData = req.body;
-    postData.author = '5b0edb9b9d720240bc7aa15f';
+    postData.author = req.userId;
     var post = new Post(postData);
     post.save((err, result) => {
         if(err) {
@@ -37,6 +37,7 @@ app.post('/post', (req, res) => {
 
 app.get('/users', async (req, res) => {
     try {
+        console.log(req.userId);
         var users = await User.find({}, '-pwd -__v');//Mongoose method
         res.send(users);
     } catch (error) {
@@ -60,5 +61,5 @@ mongoose.connect('mongodb://127.0.0.1:27017/myApp', {
 .then(() => console.log('connection successful'))
 .catch((err) => console.error(err));
 
-app.use('/auth', auth);
+app.use('/auth', auth.router);
 app.listen(3000);
