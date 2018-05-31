@@ -8,12 +8,14 @@ var router = express.Router();
 router.post('/register', (req, res) => {
     var userData = req.body;
     var user = new User(userData);
-    user.save((err, result) => {
+    user.save((err, newUser) => {
         if(err) {
-            console.log('saving user error');
+            return res.status(500).send({message: 'Error saving user'})
         }
         console.log("result");
-        res.sendStatus(200);
+        var payload = { sub: newUser._id};
+        var token = jwt.encode(payload, '123');//Hash function
+        res.status(200).send({token}); 
     })
 });
 

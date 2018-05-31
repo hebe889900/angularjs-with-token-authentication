@@ -23,8 +23,9 @@ export class AuthService {
         localStorage.removeItem(this.TOKEN_KEY);
     }
     registerUser(registerData) {
-        this.http.post(this.path + '/register', registerData).subscribe(res => {
-
+        this.http.post<any>(this.path + '/register', registerData).subscribe(res => {
+            console.log(res);
+            localStorage.setItem('token', res.token);
         })
     }
 
