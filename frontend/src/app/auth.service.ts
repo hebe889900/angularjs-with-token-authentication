@@ -20,7 +20,7 @@ export class AuthService {
     }
 
     logout() {
-
+        localStorage.removeItem(this.TOKEN_KEY);
     }
     registerUser(registerData) {
         this.http.post(this.path + '/register', registerData).subscribe(res => {
